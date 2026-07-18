@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Gran Kermes · Iglesia Lluvias de Bendición</title>
+<meta name="description" content="Menú digital de la Kermes de comida del Pacífico colombiano — Iglesia Lluvias de Bendición">
+<meta name="theme-color" content="#0B4A47">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<!-- Sprite de íconos -->
+<svg class="icon-sprite" aria-hidden="true">
+  <defs>
+    <symbol id="icon-rice" viewBox="0 0 48 48"><path d="M8 24c0-8 7-15 16-15s16 7 16 15" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M6 24h36l-3 12a4 4 0 0 1-4 3H13a4 4 0 0 1-4-3L6 24Z" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linejoin="round"/><path d="M17 18v6M24 15v6M31 18v6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="icon-fish" viewBox="0 0 48 48"><path d="M6 24c8-10 20-14 30-9-3 5-3 13 0 18-10 5-22 1-30-9Z" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linejoin="round"/><path d="M36 15l6-4-1 8" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linejoin="round"/><circle cx="16" cy="22" r="1.6" fill="currentColor"/><path d="M14 24c3 2 6 2 9 0" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/></symbol>
+    <symbol id="icon-shrimp" viewBox="0 0 48 48"><path d="M14 12c10-4 20 2 21 13 1 9-6 15-14 14-6-1-9-6-8-11 1-4 5-6 8-4" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 10l4 4M8 15l4 3M7 21l4 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="15" cy="14" r="1.5" fill="currentColor"/></symbol>
+    <symbol id="icon-pot" viewBox="0 0 48 48"><path d="M8 20h32l-3 16a4 4 0 0 1-4 3H15a4 4 0 0 1-4-3L8 20Z" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linejoin="round"/><path d="M4 20h40" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M2 14l4 4M46 14l-4 4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M18 20c0-4 2-7 6-9 4 2 6 5 6 9" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></symbol>
+    <symbol id="icon-leaf" viewBox="0 0 48 48"><path d="M10 38C8 20 20 8 38 8c2 18-10 30-28 30Z" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linejoin="round"/><path d="M12 36C20 26 28 18 36 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="icon-plate" viewBox="0 0 48 48"><circle cx="24" cy="24" r="17" stroke="currentColor" stroke-width="2.5" fill="none"/><circle cx="24" cy="24" r="10" stroke="currentColor" stroke-width="2" fill="none"/></symbol>
+    <symbol id="icon-star" viewBox="0 0 48 48"><path d="M24 6l5.5 12L42 20l-9 9 2.2 13L24 36l-11.2 6L15 29 6 20l12.5-2Z" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linejoin="round"/></symbol>
+    <symbol id="icon-fry" viewBox="0 0 48 48"><path d="M10 18h28l-4 22a3 3 0 0 1-3 2.5H17a3 3 0 0 1-3-2.5L10 18Z" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linejoin="round"/><path d="M14 18l2-10h16l2 10" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linejoin="round"/><path d="M18 24v13M24 24v14M30 24v13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="icon-dessert" viewBox="0 0 48 48"><path d="M8 20a16 16 0 0 1 32 0" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M6 20h36l-2 5H8l-2-5Z" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linejoin="round"/><path d="M11 25l3 15h20l3-15" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linejoin="round"/><path d="M24 10v-4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></symbol>
+    <symbol id="icon-phone" viewBox="0 0 24 24"><path d="M6.6 2.6c.5-.4 1.2-.4 1.6.1l2.4 3c.4.5.3 1.2-.2 1.6L9 8.6c-.4.3-.5.9-.2 1.4 1.3 2.2 3.2 4.1 5.4 5.4.5.3 1.1.2 1.4-.2l1.3-1.4c.4-.5 1.1-.6 1.6-.2l3 2.4c.5.4.5 1.1.1 1.6l-1.4 1.6c-.5.6-1.3.9-2.1.8-4.2-.6-8.4-3-11.4-6-3-3-5.4-7.2-6-11.4-.1-.8.2-1.6.8-2.1z" fill="currentColor"/></symbol>
+    <symbol id="icon-chevron" viewBox="0 0 24 24"><path d="M9 6l7 6-7 6" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="icon-close" viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19" stroke="currentColor" stroke-width="2.3" fill="none" stroke-linecap="round"/></symbol>
+  </defs>
+</svg>
+
+<!-- Divisor decorativo ilustrado del Pacífico (reutilizado entre secciones) -->
+<template id="marimba-divider-template">
+  <div class="section-divider" aria-hidden="true">
+    <img src="images/divider-pacifico.png" alt="" loading="lazy">
+  </div>
+</template>
+
+<div class="grain-overlay" aria-hidden="true"></div>
+
+<header class="hero" id="top">
+  <div class="hero__media">
+    <img src="images/hero-beach.jpg" alt="" class="hero__img">
+    <div class="hero__scrim"></div>
+  </div>
+
+  <button class="hero__menu-btn" id="hero-menu-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="quick-nav" aria-label="Abrir menú rápido de secciones">
+    <img src="images/shrimp-icon.png" alt="" class="hero__menu-btn-img">
+  </button>
+
+  <div class="hero__content">
+    <div class="hero__brand">
+      <img src="images/logo-gold.png" alt="Iglesia Lluvias De Bendiciones · Cruzada Cristiana" class="hero__brand-logo">
+    </div>
+    <h1 class="hero__title">Gran Kermes</h1>
+    <p class="hero__subtitle">Sabores del Pacífico Colombiano</p>
+    <p class="hero__schedule" id="hero-schedule">Este domingo</p>
+    <a href="#menu-start" class="hero__cta">
+      Ver el menú
+      <svg width="18" height="18"><use href="#icon-chevron"/></svg>
+    </a>
+  </div>
+  <div class="hero__divider-slot"></div>
+</header>
+
+<div class="quick-nav" id="quick-nav" aria-hidden="true">
+  <div class="quick-nav__backdrop" data-quicknav-close></div>
+  <div class="quick-nav__panel" role="dialog" aria-modal="true" aria-label="Ir a una sección del menú">
+    <div class="quick-nav__head">
+      <span class="quick-nav__title">Ir directo a…</span>
+      <button class="quick-nav__close" type="button" data-quicknav-close aria-label="Cerrar menú rápido">
+        <svg width="20" height="20"><use href="#icon-close"/></svg>
+      </button>
+    </div>
+    <div class="quick-nav__list" id="quick-nav-list"></div>
+  </div>
+</div>
+
+<div class="dish-modal" id="dish-modal" aria-hidden="true">
+  <div class="dish-modal__backdrop" data-dishmodal-close></div>
+  <div class="dish-modal__panel" role="dialog" aria-modal="true" aria-labelledby="dish-modal-name">
+    <button class="dish-modal__close" type="button" data-dishmodal-close aria-label="Cerrar">
+      <svg width="20" height="20"><use href="#icon-close"/></svg>
+    </button>
+    <div class="dish-modal__gallery">
+      <div class="dish-modal__track" id="dish-modal-track"></div>
+      <div class="dish-modal__dots" id="dish-modal-dots"></div>
+      <span class="dish-modal__price" id="dish-modal-price"></span>
+    </div>
+    <div class="dish-modal__body">
+      <h3 class="dish-modal__name" id="dish-modal-name"></h3>
+      <p class="dish-modal__desc" id="dish-modal-desc"></p>
+    </div>
+  </div>
+</div>
+
+<nav class="catnav" id="catnav" aria-label="Categorías del menú">
+  <div class="catnav__track" id="catnav-track"></div>
+</nav>
+
+<main id="menu-start">
+  <div id="menu-sections"></div>
+
+  <section class="porciones" id="porciones" aria-labelledby="porciones-title">
+    <div class="section-head">
+      <span class="section-head__eyebrow">También puedes pedir</span>
+      <h2 class="section-head__title" id="porciones-title">Porciones sueltas</h2>
+    </div>
+    <div class="board" id="porciones-board"></div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="divider-slot" id="footer-divider-slot"></div>
+  <div class="site-footer__content">
+    <p class="site-footer__org">Gran Kermes · Iglesia Lluvias de Bendición</p>
+    <p class="site-footer__tag">Con sazón del Pacífico, para bendecir a la familia de la iglesia.</p>
+  </div>
+</footer>
+
+<a class="call-bar" id="call-bar" href="tel:3153760995">
+  <span class="call-bar__icon"><svg width="20" height="20"><use href="#icon-phone"/></svg></span>
+  <span class="call-bar__text">
+    <strong>Domicilios</strong>
+    <span id="call-bar-phone">315 376 0995</span>
+  </span>
+  <span class="call-bar__cta">Llamar</span>
+</a>
+
+<script src="js/menu-data.js?v=3"></script>
+<script src="js/app.js?v=3"></script>
+</body>
+</html>
