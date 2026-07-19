@@ -271,15 +271,59 @@
   }
 
   function renderHeroDivider() {
-    document.querySelector(".hero__divider-slot").appendChild(marimbaDivider());
     document.getElementById("footer-divider-slot").appendChild(marimbaDivider("marimba-divider--light"));
   }
 
   function fillEventInfo() {
     document.getElementById("hero-schedule").textContent = MENU_DATA.event.schedule;
-    document.getElementById("call-bar-phone").textContent = MENU_DATA.event.phoneDisplay;
-    document.getElementById("call-bar").href = "tel:" + MENU_DATA.event.phone;
+
+    const phone = MENU_DATA.event.phone;
+    const whatsappMsg = encodeURIComponent("Hola, quiero pedir un domicilio de la Kermes 🍽️");
+    document.getElementById("delivery-fab-call").href = "tel:" + phone;
+    document.getElementById("delivery-fab-whatsapp").href = "https://wa.me/57" + phone + "?text=" + whatsappMsg;
+
     document.title = MENU_DATA.event.title + " · " + MENU_DATA.event.org;
+  }
+
+  function setupDeliveryFab() {
+    const fab = document.getElementById("delivery-fab");
+    const btn = document.getElementById("delivery-fab-btn");
+
+    const close = () => {
+      fab.classList.remove("is-open");
+      btn.setAttribute("aria-expanded", "false");
+    };
+    const toggle = () => {
+      const isOpen = fab.classList.toggle("is-open");
+      btn.setAttribute("aria-expanded", String(isOpen));
+    };
+
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      toggle();
+    });
+
+    document.addEventListener("click", (e) => {
+      if (fab.classList.contains("is-open") && !fab.contains(e.target)) close();
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && fab.classList.contains("is-open")) close();
+    });
+
+    // Se contrae automáticamente si el usuario vuelve a la sección hero.
+    const hero = document.getElementById("top");
+    if (hero) {
+      const heroObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting && fab.classList.contains("is-open")) close();
+          });
+        },
+        { threshold: 0.6 }
+      );
+      heroObserver.observe(hero);
+    }
   }
 
   function setupScrollSpy() {
@@ -335,6 +379,7 @@
     setupScrollSpy();
     setupQuickNav();
     setupDishModal();
+    setupDeliveryFab();
   }
 
   document.addEventListener("DOMContentLoaded", init);
