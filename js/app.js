@@ -125,8 +125,9 @@
     MENU_DATA.porciones.forEach((p) => {
       const row = document.createElement("div");
       row.className = "board__row";
+      const imgHtml = p.image ? '<img class="board__img" src="' + resolveImg(p.image) + '" alt="">' : "";
       row.innerHTML =
-        '<span class="board__name">' + p.name + "</span>" +
+        '<div class="board__left">' + imgHtml + '<span class="board__name">' + p.name + "</span></div>" +
         '<span class="board__price">' + (p.priceLabel || fmt(p.price)) + "</span>";
       frag.appendChild(row);
     });
