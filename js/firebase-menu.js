@@ -61,7 +61,11 @@ async function loadMenuFromFirestore() {
 
   const porciones = productos
     .filter((p) => p.categoriaid === "porciones")
-    .map((p) => ({ name: p.nombre, price: p.precio }));
+    .map((p) => ({
+      name: p.nombre,
+      price: p.precio,
+      image: p.imagenes && p.imagenes[0] ? p.imagenes[0] : null,
+    }));
 
   return { categories, porciones };
 }
