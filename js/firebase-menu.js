@@ -9,6 +9,8 @@ import {
   getDocs,
   query,
   where,
+  doc,
+  getDoc,
 } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 
 const ICONS = {
@@ -25,10 +27,7 @@ const ICONS = {
 
 const PLACEHOLDER_IMG = "images/placeholder-dish.svg";
 
-async function loadMenuFromFirestore() {
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-
+async function loadMenuFromFirestore(db) {
   const catsSnap = await getDocs(query(collection(db, "categorias"), where("visible", "==", true)));
   const categorias = catsSnap.docs
     .map((d) => ({ id: d.id, ...d.data() }))
@@ -70,12 +69,35 @@ async function loadMenuFromFirestore() {
   return { categories, porciones };
 }
 
+function isoToDate(iso) {
+  const [y, m, d] = iso.split("-").map(Number);
+  return new Date(y, m - 1, d);
+}
+
+async function actualizarProximaKermes(db) {
+  const snap = await getDoc(doc(db, "ajustes", "kermes"));
+  if (!snap.exists() || !snap.data().fecha) return;
+  const fecha = isoToDate(snap.data().fecha);
+  const texto = fecha.toLocaleDateString("es-CO", { weekday: "long", day: "numeric", month: "long" });
+  const el = document.getElementById("hero-schedule");
+  if (el) el.textContent = texto;
+}
+
 async function boot() {
   // Pintado instantáneo con el respaldo estático de menu-data.js — no se espera a la red.
   window.__initMenuApp();
 
+  let db;
   try {
-    const { categories, porciones } = await loadMenuFromFirestore();
+    const app = initializeApp(firebaseConfig);
+    db = getFirestore(app);
+  } catch (err) {
+    console.error("No se pudo inicializar Firebase:", err);
+    return;
+  }
+
+  try {
+    const { categories, porciones } = await loadMenuFromFirestore(db);
     if (categories.length) {
       window.MENU_DATA.categories = categories;
       window.MENU_DATA.porciones = porciones;
@@ -85,6 +107,12 @@ async function boot() {
     }
   } catch (err) {
     console.error("No se pudo actualizar el menú desde Firestore; se mantiene el respaldo estático:", err);
+  }
+
+  try {
+    await actualizarProximaKermes(db);
+  } catch (err) {
+    console.error("No se pudo cargar la fecha de la próxima kermes; se mantiene el texto por defecto:", err);
   }
 }
 
