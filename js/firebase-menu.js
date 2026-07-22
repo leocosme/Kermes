@@ -67,18 +67,21 @@ async function loadMenuFromFirestore() {
 }
 
 async function boot() {
+  // Pintado instantáneo con el respaldo estático de menu-data.js — no se espera a la red.
+  window.__initMenuApp();
+
   try {
     const { categories, porciones } = await loadMenuFromFirestore();
     if (categories.length) {
       window.MENU_DATA.categories = categories;
       window.MENU_DATA.porciones = porciones;
+      window.__refreshMenuData();
     } else {
-      console.warn("Firestore devolvió el menú vacío; se usa el respaldo estático de menu-data.js.");
+      console.warn("Firestore devolvió el menú vacío; se mantiene el respaldo estático de menu-data.js.");
     }
   } catch (err) {
-    console.error("No se pudo cargar el menú desde Firestore; se usa el respaldo estático:", err);
+    console.error("No se pudo actualizar el menú desde Firestore; se mantiene el respaldo estático:", err);
   }
-  window.__initMenuApp();
 }
 
 if (document.readyState === "loading") {

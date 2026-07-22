@@ -108,10 +108,14 @@
     return section;
   }
 
+  // root.innerHTML = "" antes de pintar: hace que renderMenu/renderPorciones/renderCatNav/
+  // renderQuickNav se puedan volver a llamar sin duplicar contenido, para poder repintar
+  // en caliente cuando llegan datos frescos de Firestore después del primer pintado.
   function renderMenu() {
     const root = document.getElementById("menu-sections");
     const frag = document.createDocumentFragment();
     MENU_DATA.categories.forEach((cat) => frag.appendChild(buildCategorySection(cat)));
+    root.innerHTML = "";
     root.appendChild(frag);
   }
 
@@ -126,6 +130,7 @@
         '<span class="board__price">' + (p.priceLabel || fmt(p.price)) + "</span>";
       frag.appendChild(row);
     });
+    board.innerHTML = "";
     board.appendChild(frag);
   }
 
@@ -140,6 +145,7 @@
       a.innerHTML = '<svg><use href="#icon-' + link.icon + '"/></svg><span>' + link.name + "</span>";
       frag.appendChild(a);
     });
+    track.innerHTML = "";
     track.appendChild(frag);
   }
 
@@ -154,13 +160,38 @@
       btn.innerHTML = '<svg><use href="#icon-' + link.icon + '"/></svg><span>' + link.name + "</span>";
       frag.appendChild(btn);
     });
+    list.innerHTML = "";
     list.appendChild(frag);
+  }
+
+  // Vuelve a enlazar los clics de los ítems del menú rápido — se llama en el arranque
+  // y otra vez cada vez que renderQuickNav() reconstruye esos botones desde cero.
+  function bindQuickNavItemClicks() {
+    const panel = document.getElementById("quick-nav");
+    const items = Array.from(panel.querySelectorAll(".quick-nav__item"));
+    items.forEach((item) => {
+      item.addEventListener("click", () => {
+        const id = item.dataset.target;
+        closeQuickNav();
+        history.pushState(null, "", "#" + id);
+        window.setTimeout(() => scrollToSection(id), 200);
+      });
+    });
+  }
+
+  function closeQuickNav() {
+    const panel = document.getElementById("quick-nav");
+    const openBtn = document.getElementById("hero-menu-btn");
+    panel.classList.remove("is-open");
+    panel.setAttribute("aria-hidden", "true");
+    openBtn.classList.remove("is-open");
+    openBtn.setAttribute("aria-expanded", "false");
+    unlockScroll();
   }
 
   function setupQuickNav() {
     const panel = document.getElementById("quick-nav");
     const openBtn = document.getElementById("hero-menu-btn");
-    const items = Array.from(panel.querySelectorAll(".quick-nav__item"));
     const closers = Array.from(panel.querySelectorAll("[data-quicknav-close]"));
 
     const open = () => {
@@ -177,32 +208,17 @@
       lockScroll();
     };
 
-    const close = () => {
-      panel.classList.remove("is-open");
-      panel.setAttribute("aria-hidden", "true");
-      openBtn.classList.remove("is-open");
-      openBtn.setAttribute("aria-expanded", "false");
-      unlockScroll();
-    };
-
     openBtn.addEventListener("click", () => {
-      panel.classList.contains("is-open") ? close() : open();
+      panel.classList.contains("is-open") ? closeQuickNav() : open();
     });
 
-    closers.forEach((el) => el.addEventListener("click", close));
+    closers.forEach((el) => el.addEventListener("click", closeQuickNav));
 
     document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && panel.classList.contains("is-open")) close();
+      if (e.key === "Escape" && panel.classList.contains("is-open")) closeQuickNav();
     });
 
-    items.forEach((item) => {
-      item.addEventListener("click", () => {
-        const id = item.dataset.target;
-        close();
-        history.pushState(null, "", "#" + id);
-        window.setTimeout(() => scrollToSection(id), 200);
-      });
-    });
+    bindQuickNavItemClicks();
   }
 
   function openDishModal(item) {
@@ -382,7 +398,20 @@
     setupDeliveryFab();
   }
 
-  // El arranque real lo dispara firebase-menu.js, una vez que intenta cargar
-  // el menú en vivo desde Firestore (o decide usar el respaldo estático).
+  // Repinta solo lo que depende de MENU_DATA (sin duplicar nada ni volver a
+  // enlazar los controles fijos del panel), para actualizar en caliente cuando
+  // llegan datos frescos de Firestore después del primer pintado instantáneo.
+  function refreshMenuData() {
+    renderCatNav();
+    renderQuickNav();
+    renderMenu();
+    renderPorciones();
+    bindQuickNavItemClicks();
+    setupScrollSpy();
+  }
+
+  // El primer pintado lo dispara firebase-menu.js de inmediato, con el respaldo
+  // estático de menu-data.js; luego llama a refreshMenuData si Firestore trae algo distinto.
   window.__initMenuApp = init;
+  window.__refreshMenuData = refreshMenuData;
 })();
