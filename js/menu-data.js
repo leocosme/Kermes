@@ -130,3 +130,6 @@ const MENU_DATA = {
     { name: "Viudo de Pelada", price: 25000 }
   ]
 };
+
+if (typeof module !== "undefined") module.exports = MENU_DATA;
+if (typeof window !== "undefined") window.MENU_DATA = MENU_DATA;

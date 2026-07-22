@@ -382,5 +382,7 @@
     setupDeliveryFab();
   }
 
-  document.addEventListener("DOMContentLoaded", init);
+  // El arranque real lo dispara firebase-menu.js, una vez que intenta cargar
+  // el menú en vivo desde Firestore (o decide usar el respaldo estático).
+  window.__initMenuApp = init;
 })();
